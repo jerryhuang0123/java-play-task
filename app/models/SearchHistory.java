@@ -11,9 +11,6 @@ import com.avaje.ebean.*;
 public class SearchHistory extends Model{
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long searchId;
-	
 	public String searchWord;
 	
 	

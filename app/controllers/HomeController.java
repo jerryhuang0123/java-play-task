@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.avaje.ebean.Model;
+
 import models.SearchHistory;
 import play.mvc.*;
 import play.data.DynamicForm;
@@ -32,10 +34,22 @@ public class HomeController extends Controller {
     	return ok(index.render(tweetList));
     }
     
+    public Result getSearchHistory() {
+    	List<SearchHistory> history = new Model.Finder(String.class, SearchHistory.class).all();
+    	StringBuilder sb = new StringBuilder("Your Search History : \n");
+    	for(SearchHistory sh : history){
+    		sb.append(sh.searchWord);
+    		sb.append("\n");
+    	}
+    	return ok(sb.toString());
+    }
+    
     public Result search() throws TwitterException{
     	SearchHistory searchHistory = formFactory.form(SearchHistory.class).bindFromRequest().get();
     	DynamicForm requestData = formFactory.form().bindFromRequest();
-    	searchHistory.save();
+    	if(new Model.Finder(String.class, SearchHistory.class).byId(searchHistory.searchWord) == null){
+        	searchHistory.save();
+    	}
     	tweetList = TwitterManager.getInstance().getTweets(searchHistory.searchWord, Integer.parseInt(requestData.get("quantity")));
     	return redirect(routes.HomeController.index());
     }

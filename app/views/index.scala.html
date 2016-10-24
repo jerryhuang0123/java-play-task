@@ -12,13 +12,28 @@
     @content
     @if(tweets.isEmpty){
     } else{
-	    <ul>
-	    	@for(tweet <- tweets) {
-	    		<li>
-	    			@tweet
-	    		</li>	
-	    	}
-	    </ul>
+    	<div class="container-fluid">
+    		<ul class="pagination">
+    		<ul>
+		    	@for(tweet <- tweets) {
+		    		<li>
+		    			@tweet
+		    		</li>	
+		    	}
+		    </ul>
+			</ul>
+    	<!-- 
+    		<ul class="pagination">
+    		<ul>
+		    	@for(tweet <- tweets) {
+		    		<li>
+		    			@tweet
+		    		</li>	
+		    	}
+			</ul>
+		    </ul>
+		     -->
+		</div>
     }
 
 }
@@ -26,7 +41,11 @@
 @content = {
     <form action="@routes.HomeController.search()" method="POST">
         Search: <input type="text" name="searchWord"><br><br>
-        Limit: <input type="number" name="quantity" min="1">
+        Total Tweets Returned: <input type="number" name="quantity" min="1">
         <button>Search</button>
+    </form>
+    <br>
+    <form action="@routes.HomeController.getSearchHistory()" method="GET">
+    	<button>See My Search History!</button>
     </form>
 }
