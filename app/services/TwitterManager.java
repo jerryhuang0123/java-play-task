@@ -54,10 +54,11 @@ public class TwitterManager{
     	return twitter;
     }
     
-    public List<String> getTweets(String searchWord) throws TwitterException{
+    public List<String> getTweets(String searchWord, int count) throws TwitterException{
     	List<String> list = new ArrayList<String>();
-    	Twitter twitter = getTwitter();
+    	twitter = getTwitter();
     	Query query = new Query(searchWord);
+    	query.setCount(count);
     	QueryResult result = twitter.search(query);
     	for(Status status: result.getTweets()){
     		Logger.info("@" + status.getUser().getScreenName() + ":" + status.getText());

@@ -25,7 +25,8 @@
 
 @content = {
     <form action="@routes.HomeController.search()" method="POST">
-        <input type="text" name="searchWord">
+        Search: <input type="text" name="searchWord"><br><br>
+        Limit: <input type="number" name="quantity" min="1">
         <button>Search</button>
     </form>
 }

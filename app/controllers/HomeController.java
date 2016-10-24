@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import models.SearchHistory;
 import play.mvc.*;
+import play.data.DynamicForm;
 import play.data.FormFactory;
 import services.TwitterManager;
 import twitter4j.TwitterException;
@@ -33,8 +34,9 @@ public class HomeController extends Controller {
     
     public Result search() throws TwitterException{
     	SearchHistory searchHistory = formFactory.form(SearchHistory.class).bindFromRequest().get();
+    	DynamicForm requestData = formFactory.form().bindFromRequest();
     	searchHistory.save();
-    	tweetList = TwitterManager.getInstance().getTweets(searchHistory.searchWord);
+    	tweetList = TwitterManager.getInstance().getTweets(searchHistory.searchWord, Integer.parseInt(requestData.get("quantity")));
     	return redirect(routes.HomeController.index());
     }
 
