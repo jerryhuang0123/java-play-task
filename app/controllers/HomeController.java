@@ -1,7 +1,15 @@
 package controllers;
 
-import play.mvc.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.inject.Inject;
+
+import models.SearchHistory;
+import play.mvc.*;
+import play.data.FormFactory;
+import services.TwitterManager;
+import twitter4j.TwitterException;
 import views.html.*;
 
 /**
@@ -10,6 +18,9 @@ import views.html.*;
  */
 public class HomeController extends Controller {
 
+	private static List<String> tweetList = new ArrayList<String>();
+	@Inject 
+	FormFactory formFactory;
     /**
      * An action that renders an HTML page with a welcome message.
      * The configuration in the <code>routes</code> file means that
@@ -17,7 +28,14 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() {
-        return ok(index.render("Your new application is ready. Test test"));
+    	return ok(index.render(tweetList));
+    }
+    
+    public Result search() throws TwitterException{
+    	SearchHistory searchHistory = formFactory.form(SearchHistory.class).bindFromRequest().get();
+    	searchHistory.save();
+    	tweetList = TwitterManager.getInstance().getTweets(searchHistory.searchWord);
+    	return redirect(routes.HomeController.index());
     }
 
 }
